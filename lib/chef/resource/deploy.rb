@@ -196,7 +196,7 @@ class Chef
       # SCM clone/checkout before symlinking. Use this to get rid of files and
       # directories you want to be shared between releases.
       # Default: ["log", "tmp/pids", "public/system"]
-      attribute :purge_before_symlink, kind_of: Array
+      attribute :purge_before_symlink, kind_of: [ Array, NilClass ]
 
       # An array of paths, relative to your app's root, where you expect dirs to
       # exist before symlinking. This runs after #purge_before_symlink, so you
@@ -206,7 +206,7 @@ class Chef
       # then specify tmp here so that the tmp directory will exist when you
       # symlink the pids directory in to the current release.
       # Default: ["tmp", "public", "config"]
-      attribute :create_dirs_before_symlink, kind_of: Array
+      attribute :create_dirs_before_symlink, kind_of: [ Array, NilClass ]
 
       # A Hash of shared/dir/path => release/dir/path. This attribute determines
       # which files and dirs in the shared directory get symlinked to the current
@@ -214,7 +214,7 @@ class Chef
       # $shared/pids that you would like to symlink as $current_release/tmp/pids
       # you specify it as "pids" => "tmp/pids"
       # Default {"system" => "public/system", "pids" => "tmp/pids", "log" => "log"}
-      attribute :symlinks, kind_of: Hash
+      attribute :symlinks, kind_of: [ Hash, NilClass ]
 
       # A Hash of shared/dir/path => release/dir/path. This attribute determines
       # which files in the shared directory get symlinked to the current release
@@ -223,7 +223,7 @@ class Chef
       # For a rails/merb app, this is used to link in a known good database.yml
       # (with the production db password) before running migrate.
       # Default {"config/database.yml" => "config/database.yml"}
-      attribute :symlink_before_migrate, kind_of: Hash
+      attribute :symlink_before_migrate, kind_of: [ Hash, NilClass ]
 
       # Callback fires before migration is run.
       def before_migrate(arg=NULL_ARG, &block)

@@ -52,13 +52,6 @@ describe Chef::Resource::Deploy do
         expect(@resource.send(attr_name)).to eql("this is a string")
         expect {@resource.send(attr_name, 8675309)}.to raise_error(ArgumentError)
       end
-
-      it "the String attribute for #{attr_name.to_s} is nillable" do
-        @resource.send(attr_name, "this is a string")
-        expect(@resource.send(attr_name)).to eql("this is a string")
-        @resource.send(attr_name, nil)
-        expect(@resource.send(attr_name)).to eql(nil)
-      end
     end
 
     def resource_has_a_boolean_attribute(attr_name, opts={:defaults_to=>false})

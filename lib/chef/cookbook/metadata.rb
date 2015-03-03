@@ -441,16 +441,16 @@ class Chef
         validate(
           options,
           {
-            :display_name => { :kind_of => String },
-            :description => { :kind_of => String },
-            :choice => { :kind_of => [ Array ], :default => [] },
-            :calculated => { :equal_to => [ true, false ], :default => false },
-            :type => { :equal_to => [ "string", "array", "hash", "symbol", "boolean", "numeric" ], :default => "string" },
-            :required => { :equal_to => [ "required", "recommended", "optional", true, false ], :default => "optional" },
-            :recipes => { :kind_of => [ Array ], :default => [] },
-            :default => { :kind_of => [ String, Array, Hash, Symbol, Numeric, TrueClass, FalseClass ] },
-            :source_url => { :kind_of => String },
-            :issues_url => { :kind_of => String }
+            :display_name => { :kind_of => [ String, NilClass ] },
+            :description => { :kind_of => [ String, NilClass ] },
+            :choice => { :kind_of => [ Array, NilClass ], :default => [] },
+            :calculated => { :equal_to => [ true, false, nil ], :default => false },
+            :type => { :equal_to => [ "string", "array", "hash", "symbol", "boolean", "numeric", nil ], :default => "string" },
+            :required => { :equal_to => [ "required", "recommended", "optional", true, false, nil ], :default => "optional" },
+            :recipes => { :kind_of => [ Array, NilClass ], :default => [] },
+            :default => { :kind_of => [ String, Array, Hash, Symbol, Numeric, TrueClass, FalseClass, NilClass ] },
+            :source_url => { :kind_of => [ String, NilClass ] },
+            :issues_url => { :kind_of => [ String, NilClass ] }
           }
         )
         options[:required] = remap_required_attribute(options[:required]) unless options[:required].nil?
@@ -466,8 +466,8 @@ class Chef
         validate(
           options,
           {
-            :title => { :kind_of => String },
-            :description => { :kind_of => String }
+            :title => { :kind_of => [ String, NilClass ] },
+            :description => { :kind_of => [ String, NilClass ] }
           }
         )
         @groupings[name] = options

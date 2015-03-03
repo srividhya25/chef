@@ -4,7 +4,9 @@
 * mixin the LWRP attribute DSL method into Chef::Resource directly
 * make all LWRP attributes nillable
 * [**Phil Dibowitz**](https://github.com/jaymzh):
-  [Pull 3013](https://github.com/chef/chef/pull/3013) Allow people to pass in `source` to package
+  [Issue 3008](https://github.com/chef/chef/issues/3008) Allow people to pass in `source` to package
+* [Issue 3011](https://github.com/chef/chef/issues/3011) `package` provider base should include 
+  `Chef::Mixin::Command` as there are still providers that use it.
 
 ## 12.1.0
 

@@ -46,6 +46,26 @@ class Chef
         @configuration[:environment] = @configuration[:environment] && @configuration[:environment]["RAILS_ENV"]
       end
 
+      # @return [Array] create_dirs_before_symlink parameter set on the resource
+      def create_dirs_before_symlink
+        new_resource.create_dirs_before_symlink || []
+      end
+
+      # @return [Array] purge_before_symlink paremeter set on the resource
+      def purge_before_symlink
+        new_resource.purge_before_symlink || []
+      end
+
+      # @return [Hash] symlinks parameter set on the resource
+      def symlinks
+        new_resource.symlinks || {}
+      end
+
+      # @return [Hash] symlink_before_migrate parameter set on the resource
+      def symlink_before_migrate
+        new_resource.symlink_before_migrate || {}
+      end
+
       def whyrun_supported?
         true
       end
@@ -302,9 +322,9 @@ class Chef
       end
 
       def run_symlinks_before_migrate
-        links_info = new_resource.symlink_before_migrate.map { |src, dst| "#{src} => #{dst}" }.join(", ")
+        links_info = symlink_before_migrate.map { |src, dst| "#{src} => #{dst}" }.join(", ")
         converge_by("make pre-migration symlinks: #{links_info}") do
-          new_resource.symlink_before_migrate.each do |src, dest|
+          symlink_before_migrate.each do |src, dest|
             begin
               FileUtils.ln_sf(new_resource.shared_path + "/#{src}", release_path + "/#{dest}")
             rescue => e
@@ -316,15 +336,15 @@ class Chef
       end
 
       def link_tempfiles_to_current_release
-        dirs_info = new_resource.create_dirs_before_symlink.join(",")
-        new_resource.create_dirs_before_symlink.each do |dir|
+        dirs_info = create_dirs_before_symlink.join(",")
+        create_dirs_before_symlink.each do |dir|
           create_dir_unless_exists(release_path + "/#{dir}")
         end
         Chef::Log.info("#{new_resource} created directories before symlinking: #{dirs_info}")
 
-        links_info = new_resource.symlinks.map { |src, dst| "#{src} => #{dst}" }.join(", ")
+        links_info = symlinks.map { |src, dst| "#{src} => #{dst}" }.join(", ")
         converge_by("link shared paths into current release:  #{links_info}") do
-          new_resource.symlinks.each do |src, dest|
+          symlinks.each do |src, dest|
             begin
               FileUtils.ln_sf(::File.join(new_resource.shared_path, src), ::File.join(release_path, dest))
             rescue => e
@@ -337,13 +357,10 @@ class Chef
         enforce_ownership
       end
 
-      def create_dirs_before_symlink
-      end
-
       def purge_tempfiles_from_current_release
-        log_info = new_resource.purge_before_symlink.join(", ")
+        log_info = purge_before_symlink.join(", ")
         converge_by("purge directories in checkout #{log_info}") do
-          new_resource.purge_before_symlink.each { |dir| FileUtils.rm_rf(release_path + "/#{dir}") }
+          purge_before_symlink.each { |dir| FileUtils.rm_rf(release_path + "/#{dir}") }
           Chef::Log.info("#{new_resource} purged directories in checkout #{log_info}")
         end
       end

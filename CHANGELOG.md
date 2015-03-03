@@ -3,6 +3,8 @@
 * make deploy resource attributes nillable (`symlink_before_migrate nil`) works now
 * mixin the LWRP attribute DSL method into Chef::Resource directly
 * make all LWRP attributes nillable
+* [**Phil Dibowitz**](https://github.com/jaymzh):
+  [Pull 3013](https://github.com/chef/chef/pull/3013) Allow people to pass in `source` to package
 
 ## 12.1.0
 
